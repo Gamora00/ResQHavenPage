@@ -1,7 +1,7 @@
 // src/services/api.js
 import axios from "axios";
-const postUrl = "http://localhost:5000/auth/"
-const BASE_URL = 'http://localhost:5000';
+const postUrl = "resqhavenbackend-production.up.railway.app/auth/"
+const BASE_URL = 'resqhavenbackend-production.up.railway.app';
 
 // GET request
 export const getRequest = async (endpoint) => {
