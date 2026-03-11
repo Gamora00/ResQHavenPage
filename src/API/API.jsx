@@ -3,7 +3,6 @@ import axios from "axios";
 const BASE_URL = 
   'https://resqhavenbackend-production.up.railway.app'
 
-axios.defaults.withCredentials = true
 
 // GET request
 export const getRequest = async (endpoint) => {
