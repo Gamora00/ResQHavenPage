@@ -1,7 +1,10 @@
 // src/services/api.js
 import axios from "axios";
-const postUrl = "resqhavenbackend-production.up.railway.app/auth/"
-const BASE_URL = 'resqhavenbackend-production.up.railway.app';
+const postUrl = "https://resqhavenbackend-production.up.railway.app/auth/"
+const BASE_URL = 'https://resqhavenbackend-production.up.railway.app/';
+
+
+
 
 // GET request
 export const getRequest = async (endpoint) => {
