@@ -31,7 +31,7 @@ export default function SignInForm() {
 
     try {
       setLoading(true);
-      const response = await postRequest('login', formData)
+      const response = await postRequest('auth/login', formData)
 
       if(response.success){
         window.location.href = '/'

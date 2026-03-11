@@ -116,7 +116,7 @@ export default function Map() {
     const fetchData = async () => {
       try {
         const [c, h] = await Promise.all([
-          getRequest('evacuations'),
+          getRequest('api/evacuations'),
           //getRequest('hazards/flood-zones')
         ]);
         setCenters(c);
