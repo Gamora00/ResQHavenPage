@@ -1,0 +1,237 @@
+import { useState } from "react";
+import { Link } from "react-router";
+import { postRequest } from "../../../API/API";
+
+import showPass from '../../../assets/images/showPass.png'
+import hidePassword from '../../../assets/images/hidePass.png'
+
+
+export default function SignInForm() {
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    try {
+      setLoading(true);
+      const response = await postRequest('login', formData)
+
+      if(response.success){
+        window.location.href = '/'
+        
+      }
+
+    } catch (err) {
+      setError(
+        err.response?.message ||
+        'Login failed. Please try again.'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className='min-vh-100 d-flex
+      align-items-center justify-content-center
+      bg-light'
+    >
+      <div className='card border-0 shadow-sm'
+        style={{ width: '100%', maxWidth: 448 }}
+      >
+        <div className='card-body p-4 p-md-5'>
+
+          {/* Back to dashboard */}
+          <div className='mb-4'>
+            <Link
+              to='/'
+              className='text-muted text-decoration-none'
+              style={{ fontSize: 14 }}
+            >
+              ← Back to dashboard
+            </Link>
+          </div>
+
+          {/* Header */}
+          <div className='mb-4'>
+            <h1 className='fw-semibold mb-1'
+              style={{ fontSize: 24 }}
+            >
+              Sign In
+            </h1>
+            <p className='text-muted mb-0'
+              style={{ fontSize: 14 }}
+            >
+              Enter your email and password
+              to sign in!
+            </p>
+          </div>
+
+          {/* Error Alert */}
+          {error && (
+            <div className='alert alert-danger
+              d-flex align-items-center
+              gap-2 py-2'
+            >
+              <span>❌</span>
+              <span style={{ fontSize: 14 }}>
+                {error}
+              </span>
+            </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleSubmit}>
+            <div className='d-flex flex-column gap-3'>
+
+              {/* Email */}
+              <div>
+                <label className='form-label
+                  fw-medium'
+                  style={{ fontSize: 14 }}
+                >
+                  Email
+                  <span className='text-danger'>
+                    *
+                  </span>
+                </label>
+                <input
+                  type='email'
+                  name='email'
+                  className='form-control'
+                  placeholder='info@gmail.com'
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              {/* Password */}
+              <div>
+                <label className='form-label
+                  fw-medium'
+                  style={{ fontSize: 14 }}
+                >
+                  Password
+                  <span className='text-danger'>
+                    *
+                  </span>
+                </label>
+                <div className='input-group'>
+                  <input
+                    type={
+                      showPassword
+                        ? 'text'
+                        : 'password'
+                    }
+                    name='password'
+                    className='form-control'
+                    placeholder='Enter your password'
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
+                  <button
+                    type='button'
+                    className='btn btn-outline-secondary w-10'
+                    onClick={() =>
+                      setShowPassword(!showPassword)
+                    }
+                  >
+                    {showPassword ? <img src={showPass} className="" alt="Show" /> : <img src={hidePassword} alt="Hide" />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Keep logged in + Forgot password */}
+              <div className='d-flex
+                align-items-center
+                justify-content-between'
+              >
+                <div className='form-check mb-0'>
+                  <input
+                    type='checkbox'
+                    className='form-check-input'
+                    id='remember'
+                    checked={isChecked}
+                    onChange={(e) =>
+                      setIsChecked(e.target.checked)
+                    }
+                  />
+                  <label
+                    className='form-check-label
+                      text-muted'
+                    htmlFor='remember'
+                    style={{ fontSize: 14 }}
+                  >
+                    Keep me logged in
+                  </label>
+                </div>
+                <Link
+                  to='/reset-password'
+                  className='text-danger
+                    text-decoration-none'
+                  style={{ fontSize: 14 }}
+                >
+                  Forgot password?
+                </Link>
+              </div>
+
+              {/* Sign In Button */}
+              <button
+                type='submit'
+                className='btn btn-danger w-100'
+                disabled={loading}
+              >
+                {loading
+                  ? <>
+                      <span className='spinner-border
+                        spinner-border-sm me-2'
+                      />
+                      Signing in...
+                    </>
+                  : 'Sign In'
+                }
+              </button>
+
+            </div>
+          </form>
+
+          {/* Sign Up Link */}
+          <div className='mt-4 text-center'>
+            <p className='text-muted mb-0'
+              style={{ fontSize: 14 }}
+            >
+              Don't have an account?{" "}
+              <Link
+                to='/signUp'
+                className='text-danger
+                  text-decoration-none fw-medium'
+              >
+                Sign Up
+              </Link>
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+}
