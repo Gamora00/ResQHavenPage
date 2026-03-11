@@ -46,7 +46,7 @@ export default function RegisterForm() {
     try {
       setLoading(true);
       const response = await postRequest(
-        'auth/register',
+        'auth/user-reg',
         formData
       )
 
@@ -72,7 +72,7 @@ export default function RegisterForm() {
 
     } catch (err) {
       setError(
-        err.response?.data?.message ||
+        err.response?.message ||
         'Registration failed. Please try again.'
       );
     } finally {
