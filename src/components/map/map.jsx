@@ -117,10 +117,10 @@ export default function Map() {
       try {
         const [c, h] = await Promise.all([
           getRequest('api/evacuations'),
-          //getRequest('hazards/flood-zones')
+          getRequest('api/hazards')
         ]);
         setCenters(c);
-        //setHazardZones(h);
+        setHazardZones(h)
       } catch (err) {
         console.error('Fetch error:', err);
       }
@@ -208,7 +208,7 @@ const centerIcon = (percentage) => new L.Icon({
               zone.latitude,
               zone.longitude
             ]}
-            radius={400}
+            radius={500}
             pathOptions={{
               color: hazardColors[zone.flood_risk],
               fillColor: hazardColors[zone.flood_risk],
@@ -223,6 +223,8 @@ const centerIcon = (percentage) => new L.Icon({
               }}>
                 {zone.flood_risk.toUpperCase()}
               </b>
+              <br/>
+              Type: <b>{zone.disaster_type}</b>
             </Popup>
           </Circle>
         ))}

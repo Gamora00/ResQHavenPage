@@ -1,7 +1,9 @@
 import axios from "axios";
 
 const BASE_URL = 
-  'https://resqhavenbackend-production.up.railway.app'
+   'https://resqhavenbackend-production.up.railway.app'
+
+//const BASE_URL = 'http://localhost:5000'
 
 
 // GET request
@@ -21,7 +23,7 @@ export const getRequest = async (endpoint) => {
 export const postRequest = async (endpoint, data) => {
   try {
     const response = await axios.post(
-      `${BASE_URL}/${endpoint}`, // ← removed hardcoded /auth/
+      `${BASE_URL}/${endpoint}`, 
       data
     );
     return response.data;
