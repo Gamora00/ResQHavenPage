@@ -22,8 +22,10 @@ const navItems = [
     name: "Forms",
     icon: "📋",
     subItems: [
-      { name: "Form Elements", path: "/form-elements" },
-      { name: "Evacuation Center", path: "/evacuation-center-reg" },
+      { name: "Check In", path: "/check-reg" },
+      { name: "Evacuation Center", path: "/evacuation-reg" },
+      { name: "Hazard", path: "/hazard-reg" },
+      { name: "Admin", path: "/admin-reg" },
     ],
   },
   {

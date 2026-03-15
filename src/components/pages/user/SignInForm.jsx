@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router"; // ✅ add useNavigate
 import { postRequest } from "../../../API/API";
+import { useAuth } from "../../../authentication/AuthContext"; // ✅ add this
 
 import showPass from '../../../assets/images/showPass.png'
 import hidePassword from '../../../assets/images/hidePass.png'
 
-
 export default function SignInForm() {
+  const { setUser } = useAuth() // ✅ add this
+  const navigate = useNavigate() // ✅ add this
 
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -31,11 +33,19 @@ export default function SignInForm() {
 
     try {
       setLoading(true);
-      const response = await postRequest('auth/login', formData)
+      const response = await postRequest(
+        'auth/login', formData
+      )
 
-      if(response.success){
-        window.location.href = '/'
+      if (response.success) {
+        setUser(response.user) 
         
+        if(response.user.role != 'user'){
+        navigate('/admin-reg')
+        }
+        else{
+          navigate('/')
+        }        
       }
 
     } catch (err) {
@@ -48,6 +58,7 @@ export default function SignInForm() {
     }
   };
 
+  // ✅ rest of your JSX stays exactly the same!
   return (
     <div className='min-vh-100 d-flex
       align-items-center justify-content-center
@@ -58,7 +69,6 @@ export default function SignInForm() {
       >
         <div className='card-body p-4 p-md-5'>
 
-          {/* Back to dashboard */}
           <div className='mb-4'>
             <Link
               to='/'
@@ -69,7 +79,6 @@ export default function SignInForm() {
             </Link>
           </div>
 
-          {/* Header */}
           <div className='mb-4'>
             <h1 className='fw-semibold mb-1'
               style={{ fontSize: 24 }}
@@ -84,7 +93,6 @@ export default function SignInForm() {
             </p>
           </div>
 
-          {/* Error Alert */}
           {error && (
             <div className='alert alert-danger
               d-flex align-items-center
@@ -97,20 +105,15 @@ export default function SignInForm() {
             </div>
           )}
 
-          {/* Form */}
           <form onSubmit={handleSubmit}>
             <div className='d-flex flex-column gap-3'>
 
-              {/* Email */}
               <div>
-                <label className='form-label
-                  fw-medium'
+                <label className='form-label fw-medium'
                   style={{ fontSize: 14 }}
                 >
                   Email
-                  <span className='text-danger'>
-                    *
-                  </span>
+                  <span className='text-danger'>*</span>
                 </label>
                 <input
                   type='email'
@@ -123,24 +126,16 @@ export default function SignInForm() {
                 />
               </div>
 
-              {/* Password */}
               <div>
-                <label className='form-label
-                  fw-medium'
+                <label className='form-label fw-medium'
                   style={{ fontSize: 14 }}
                 >
                   Password
-                  <span className='text-danger'>
-                    *
-                  </span>
+                  <span className='text-danger'>*</span>
                 </label>
                 <div className='input-group'>
                   <input
-                    type={
-                      showPassword
-                        ? 'text'
-                        : 'password'
-                    }
+                    type={showPassword ? 'text' : 'password'}
                     name='password'
                     className='form-control'
                     placeholder='Enter your password'
@@ -150,19 +145,20 @@ export default function SignInForm() {
                   />
                   <button
                     type='button'
-                    className='btn btn-outline-secondary w-10'
+                    className='btn btn-outline-secondary'
                     onClick={() =>
                       setShowPassword(!showPassword)
                     }
                   >
-                    {showPassword ? <img src={showPass} className="" alt="Show" /> : <img src={hidePassword} alt="Hide" />}
+                    {showPassword
+                      ? <img src={showPass} alt="Show" />
+                      : <img src={hidePassword} alt="Hide" />
+                    }
                   </button>
                 </div>
               </div>
 
-              {/* Keep logged in + Forgot password */}
-              <div className='d-flex
-                align-items-center
+              <div className='d-flex align-items-center
                 justify-content-between'
               >
                 <div className='form-check mb-0'>
@@ -176,8 +172,7 @@ export default function SignInForm() {
                     }
                   />
                   <label
-                    className='form-check-label
-                      text-muted'
+                    className='form-check-label text-muted'
                     htmlFor='remember'
                     style={{ fontSize: 14 }}
                   >
@@ -186,15 +181,13 @@ export default function SignInForm() {
                 </div>
                 <Link
                   to='/reset-password'
-                  className='text-danger
-                    text-decoration-none'
+                  className='text-danger text-decoration-none'
                   style={{ fontSize: 14 }}
                 >
                   Forgot password?
                 </Link>
               </div>
 
-              {/* Sign In Button */}
               <button
                 type='submit'
                 className='btn btn-danger w-100'
@@ -214,7 +207,6 @@ export default function SignInForm() {
             </div>
           </form>
 
-          {/* Sign Up Link */}
           <div className='mt-4 text-center'>
             <p className='text-muted mb-0'
               style={{ fontSize: 14 }}

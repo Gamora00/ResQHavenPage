@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import { postRequest } from "../../../API/API";
+import { QRCodeSVG } from 'qrcode.react'
+import QrCode from '../../QR/qr'
 
 export default function RegisterForm() {
 
@@ -9,6 +11,8 @@ export default function RegisterForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [registeredUser, setRegisteredUser] = useState(null)
+
 
   const [formData, setFormData] = useState({
     firstname: '',
@@ -51,6 +55,7 @@ export default function RegisterForm() {
       )
 
       if (response.success) {
+        setRegisteredUser(response.user)
         setSuccess(
           'Account created successfully! You can now sign in.'
         );
@@ -477,6 +482,9 @@ export default function RegisterForm() {
           </div>
 
         </div>
+        {registeredUser && (
+        <QrCode user={registeredUser} />
+      )}
       </div>
     </div>
   );
